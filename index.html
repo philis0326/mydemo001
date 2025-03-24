@@ -52,18 +52,22 @@
 	
     <script>
         // 初始数据配置
-        const userData = {
-            lastWeekScore: 117,      // 上周得分
-            currentBalance: 80,    // 当前余额
-            activities: {
-                addCash: 30,
-                referrals: 15,
-                p2p: 17,
-                crossBorder: 0,
-                miniApps: 35,
-                billPayments: 60
-            }
-        };
+        if('currentUserData' in localStorage){
+		const userData = JSON.parse(localStorage.getItem('currentUserData'));
+	}else{
+		const userData = {
+			lastWeekScore: 117,      // 上周得分
+			currentBalance: 80,    // 当前余额
+			activities: {
+				addCash: 30,
+				referrals: 15,
+				p2p: 17,
+				crossBorder: 0,
+				miniApps: 35,
+				billPayments: 60
+			}
+		};
+	}
 
         // 等级配置
         const LEVELS = [
