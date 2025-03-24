@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Center</title>
+	<link rel="stylesheet" href="points_event.css">    
+</head>
+<body>
+	<div class="page-header">
+        <h1>Reward Center</h1>
+    </div>
+	
+    <div class="card">
+        <h2>📊 Last week's performance</h2>
+        <p>Score: <span id="lastWeekScore">0</span> pts</p>
+        <p>Rank: <span class="level-badge" id="currentLevel">Shaker</span></p>
+        <p>This week's applicable boost buff: <span id="currentBuff">0.5%</span></p>
+    </div>
+
+    <div class="card">
+        <h2>🚀 Current progress</h2>
+        <div class="progress-bar">
+            <div class="progress-fill" id="currentProgress"></div>
+        </div>
+        <p>Current rank: <span class="level-badge" id="nextLevel">Starter</span></p>
+        <p id="nextLevelInfo">Next rank in: 51 pts</p>
+		<p>Projected boost buff: <span id="nextBuff">0.5%</span></p>
+    </div>
+
+    <div class="card simulator collapsible">
+        <div class="simulator-header" onclick="toggleSimulator()">
+            <h2>💡 Earning simulator</h2>
+            <span class="arrow">▼</span>
+        </div>
+        <div class="simulator-content">
+            <p>Current balance: $<span id="currentBalance">0</span></p>
+            <input type="range" id="balanceSimulator" min="0" max="1000" value="0">
+            <div class="result-box">
+                <p>Weekly earning: $<span id="weeklyEarn">0.00</span></p>
+                <p>Daily earning: $<span id="dailyEarn">0.00</span></p>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📝 Activities</h2>
+        <div id="activitiesList"></div>
+    </div>
+	
+	<div class="back-to-top" onclick="scrollToTop()">↑</div>
+	
+    <script>
+        // 初始数据配置
+        const userData = {
+            lastWeekScore: 117,      // 上周得分
+            currentBalance: 80,    // 当前余额
+            activities: {
+                addCash: 30,
+                referrals: 15,
+                p2p: 17,
+                crossBorder: 0,
+                miniApps: 35,
+                billPayments: 60
+            }
+        };
+
+        // 等级配置
+        const LEVELS = [
+            { name: 'Starter', min: 0, buff: 0.5 },
+            { name: 'Mover', min: 51, buff: 1 },
+            { name: 'Shaker', min: 151, buff: 1.5 },
+            { name: 'Master', min: 301, buff: 2 }
+        ];
+
+        // 活动配置
+        const ACTIVITIES = [
+			{ 
+				id: 'addCash',
+				label: 'Add cash',
+				desc: '+10 points each time the user deposits',
+				max: 30,
+				getCurrent: () => userData.activities.addCash
+			},
+			{
+				id: 'referrals',
+				label: 'Referrals',
+				desc: '+5 points for each valid referral',
+				max: 30,
+				getCurrent: () => userData.activities.referrals
+			},
+			{
+				id: 'balance',
+				label: 'Hold Higher balance',
+				desc: 'Tiered points based on balance',
+				max: 100,
+				getCurrent: () => {
+					const balance = userData.currentBalance;
+					if (balance >= 500) return 100;
+					if (balance >= 100) return 50;
+					if (balance >= 50) return 20;
+					if (balance >= 10) return 10;
+					return 0;
+				}
+			},
+			{
+				id: 'p2p',
+				label: 'P2P transactions',
+				desc: '+3 pts per action',
+				max: 20,
+				getCurrent: () => userData.activities.p2p
+			},
+			{
+				id: 'crossBorder',
+				label: 'Cross-border Sends',
+				desc: '+25 pts per action',
+				max: 50,
+				getCurrent: () => userData.activities.crossBorder
+			},
+			{
+				id: 'miniApps',
+				label: 'Mini App Usage',
+				desc: '+10 pts per action',
+				max: 70,
+				getCurrent: () => userData.activities.miniApps
+			},
+			{
+				id: 'billPayments',
+				label: 'Bill Payments',
+				desc: '+20 pts per action',
+				max: 100,
+				getCurrent: () => userData.activities.billPayments
+			},
+		];
+
+        // 初始化页面
+        function init() {
+            // 上周数据
+            document.getElementById('lastWeekScore').textContent = userData.lastWeekScore;
+            updateLevelDisplay(userData.lastWeekScore, true);
+
+            // 本周数据
+            const currentScore = calculateCurrentScore();
+            updateLevelDisplay(currentScore);
+            updateProgress(currentScore);
+
+            // 初始化模拟器
+            initSimulator();
+
+            // 初始化活动列表
+            initActivities();
+        }
+
+        // 计算当前得分（含余额计算）
+        function calculateCurrentScore() {
+            let score = 0;
+			// 计算其他活动得分（使用真实数据）
+			score += userData.activities.addCash;
+			score += userData.activities.referrals;
+			score += userData.activities.p2p;
+			score += userData.activities.crossBorder;
+			score += userData.activities.miniApps;
+			score += userData.activities.billPayments;
+
+			// 计算真实余额得分
+			const realBalance = userData.currentBalance;
+			if (realBalance >= 500) score += 100;
+			else if (realBalance >= 100) score += 50;
+			else if (realBalance >= 50) score += 20;
+			else if (realBalance >= 10) score += 10;
+
+			return score;
+        }
+
+        // 更新等级显示
+        function updateLevelDisplay(score, isLastWeek = false) {
+			let currentLevel;
+			for (let i = LEVELS.length - 1; i >= 0; i--) {
+				if (score >= LEVELS[i].min) {
+					currentLevel = LEVELS[i];
+					break;
+				}
+			}
+    
+			const suffix = isLastWeek ? 'current' : 'next';
+			console.log(suffix);
+			document.getElementById(suffix+'Level').textContent = currentLevel.name;
+			document.getElementById(suffix+'Buff').textContent = `${currentLevel.buff}%`;
+		}
+
+        // 更新进度条
+        function updateProgress(score) {
+			let nextLevel = LEVELS.find(l => l.min > score);
+			if (!nextLevel) {
+				document.getElementById('nextLevelInfo').textContent = '已达最高等级';
+				document.querySelector('#currentProgress').style.width = '100%';
+				return;
+			}
+
+			const currentLevel = LEVELS.find(l => l.min <= score && (LEVELS[LEVELS.indexOf(l)+1]?.min > score || !LEVELS[LEVELS.indexOf(l)+1]));
+			const progress = (score - currentLevel.min) / (nextLevel.min - currentLevel.min) * 100;
+			document.querySelector('#currentProgress').style.width = `${progress}%`;
+			document.getElementById('nextLevelInfo').textContent = 
+				`Next rank in: ${nextLevel.min - score} pts`;
+		}
+
+        // 初始化模拟器
+        function initSimulator() {
+			const simulator = document.getElementById('balanceSimulator');
+			const balanceDisplay = document.getElementById('currentBalance');
+			const weeklyEarn = document.getElementById('weeklyEarn');
+			const dailyEarn = document.getElementById('dailyEarn');
+
+			// 使用临时变量存储模拟值
+			let simulatedBalance = userData.currentBalance;
+			simulator.value = simulatedBalance;
+			balanceDisplay.textContent = simulatedBalance;
+
+			// 修改事件监听器
+			simulator.addEventListener('input', (e) => {
+				// 只更新模拟值，不修改真实数据
+				simulatedBalance = parseInt(e.target.value);
+
+				// 仅更新当前卡片的显示
+				balanceDisplay.textContent = simulatedBalance;
+
+				// 使用模拟值计算收益
+				const buff = parseFloat(document.getElementById('currentBuff').textContent) / 100;
+				const weekly = (simulatedBalance * buff).toFixed(2);
+				const daily = (weekly / 7).toFixed(2);
+
+				weeklyEarn.textContent = weekly;
+				dailyEarn.textContent = daily;
+			});
+		}
+
+        // 初始化活动列表
+        function initActivities() {
+			const container = document.getElementById('activitiesList');
+			container.innerHTML = '';
+
+			ACTIVITIES.forEach(activity => {
+			// 使用真实用户数据初始化
+				const current = activity.getCurrent();
+				const max = activity.max;
+				const isFull = current >= max;
+				const progress = Math.min((current / max) * 100, 100);
+
+				const activityItem = document.createElement('div');
+				activityItem.className ='activity-item';
+				activityItem.innerHTML = `
+				<h3>${activity.label}</h3>
+				<p>${activity.desc} (Max: ${max} points)</p>
+				<div class="progress-bar">
+					<div class="progress-fill ${isFull ? 'full' : ''}" style="width: ${progress}%"></div>
+				</div>
+				<p>Current pts: ${current} ${isFull ? '<span class="max-tag">Reached Max</span>' : ''}</p>
+				`;
+				container.appendChild(activityItem);
+			});
+		}
+		
+		 function toggleCollapse(header) {
+            const content = header.nextElementSibling;
+            content.classList.toggle('active');
+            header.querySelector('.arrow').textContent = 
+                content.classList.contains('active') ? '▲' : '▼';
+        }
+
+        // 返回顶部功能
+        window.onscroll = function() {
+            document.querySelector('.back-to-top').style.display = 
+                (document.body.scrollTop > 20 || document.documentElement.scrollTop > 20) 
+                ? 'flex' : 'none';
+        };
+
+        function scrollToTop() {
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        }
+		
+		function toggleSimulator() {
+			const simulator = document.querySelector('.simulator');
+			const content = simulator.querySelector('.simulator-content');
+			const arrow = simulator.querySelector('.arrow');
+
+			simulator.classList.toggle('collapsed');
+			arrow.textContent = simulator.classList.contains('collapsed') ? '▲' : '▼';
+
+			// 自动滚动到适当位置
+			if (!simulator.classList.contains('collapsed')) {
+				setTimeout(() => {
+					simulator.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				}, 300);
+			}
+		}
+
+		// 初始化时根据屏幕尺寸自动折叠
+		function initCollapse() {
+			if (window.innerHeight < 700) {
+					document.querySelector('.simulator').classList.add('collapsed');
+			}
+		}
+		window.addEventListener('load', initCollapse);
+        // 运行初始化
+        init();
+    </script>
+</body>
+</html>
