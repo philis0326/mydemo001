@@ -52,10 +52,11 @@
 	
     <script>
         // 初始数据配置
-        if('currentUserData' in localStorage){
-		const userData = JSON.parse(localStorage.getItem('currentUserData'));
+        const userData = [];
+	if('currentUserData' in localStorage){
+		userData = JSON.parse(localStorage.getItem('currentUserData'));
 	}else{
-		const userData = {
+		userData = {
 			lastWeekScore: 117,      // 上周得分
 			currentBalance: 80,    // 当前余额
 			activities: {
