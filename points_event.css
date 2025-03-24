@@ -228,7 +228,7 @@ body {
 }
 
 /* 调整原有MAX标签 */
-.max-tag {
+.max-tag, .level-badge {
   background: var(--secondary-color);
   color: white;
   padding: 2px 8px;
