@@ -52,7 +52,7 @@
 	
     <script>
         // 初始数据配置
-        const userData = [];
+        let userData = [];
 	if('currentUserData' in localStorage){
 		userData = JSON.parse(localStorage.getItem('currentUserData'));
 	}else{
