@@ -52,7 +52,7 @@
 	
     <script>
         // 初始数据配置
-        let userData = [];
+        let userData = {};
 	if('currentUserData' in localStorage){
 		userData = JSON.parse(localStorage.getItem('currentUserData'));
 	}else{
@@ -69,6 +69,7 @@
 			}
 		};
 	}
+	console.log(JSON.stringify(userData));
 
         // 等级配置
         const LEVELS = [
