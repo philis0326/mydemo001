@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reward Center</title>
+	<link rel="stylesheet" href="points.css">    
+</head>
+<body>
+	<button class="button-back" onclick="history.back()"><< back</button>
+	<div class="page-header">
+        <h1>MiniPay Points</h1>
+    </div>
+	<div class = "card-container">
+		<div class="card">
+			<h2>📊 Last week's rank</h2>
+			<p>Score: <span id="lastWeekScore">0</span> pts</p>
+			<p>Rank: <span class="level-badge" id="currentLevel">Shaker</span></p>			
+		</div>	
+	
+		<div class="card">
+			<h2>🚀 Current rank</h2>
+			<div class="progress-bar">
+				<div class="progress-fill" id="currentProgress"></div>
+			</div>
+			<p>Current rank: <span class="level-badge" id="nextLevel">Starter</span></p>
+			<p id="nextLevelInfo">Next rank in: 51 pts</p>			
+		</div>    
+
+		<div class="card">
+			<h2>📝 Points progress</h2>
+			<div id="activitiesList"></div>
+		</div>
+	</div>
+	<div class="back-to-top" onclick="scrollToTop()">↑</div>
+	
+    <script src="points.js"></script>
+</body>
+</html>

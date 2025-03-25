@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boost Rewards</title>
+    <link rel="stylesheet" href="boost_event.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Boost Your Rewards</h1>
+            <p class="subtitle">Maximize your earnings with higher balances and activity</p>
+        </header>
+
+        <div class="card">
+            <div class="card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <span>Your Earnings Summary</span>
+            </div>
+            
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <span class="stat-label">Yesterday's Balance</span>
+                    <span class="stat-value" id="yesterday-balance">$50.75</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">Daily Earning</span>
+                    <span class="stat-value earning-value" id="daily-earning">$3.14</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">Last Week's Rank</span>
+                    <span class="stat-value">
+                        Starter
+                        <span class="rank-badge starter">Starter</span>
+                    </span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">Applied Rate</span>
+                    <span class="stat-value" id="applied-rate">1.25%</span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">Current Week Rank</span>
+                    <span class="stat-value">
+                        Mover
+                        <span class="rank-badge mover">Mover</span>
+                    </span>
+                </div>
+                
+                <div class="stat-item">
+                    <span class="stat-label">Projected Rate</span>
+                    <span class="stat-value" id="projected-rate">1.75%</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <span>Earnings Simulator</span>
+            </div>
+            
+            <div class="simulator">
+                <div class="slider-container">
+                    <div class="slider-labels">
+                        <span>$0</span>
+                        <span>$500</span>
+                        <span>$1,000</span>
+                    </div>
+                    <input type="range" min="0" max="1000" value="0" step="10" class="slider" id="balance-slider">
+                </div>
+                
+                <div class="simulation-results">
+                    <div>
+                        <div class="simulation-label">Simulated Balance</div>
+                        <div class="simulation-value" id="simulated-balance">$150</div>
+                    </div>
+                    <div>
+                        <div class="simulation-label">Projected Weekly Earning</div>
+                        <div class="simulation-value earning-value" id="projected-weekly-earning">$3.14</div>
+                    </div>
+					<div>
+                        <div class="simulation-label">Projected Daily Earning</div>
+                        <div class="simulation-value earning-value" id="projected-earning">$3.14</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="actions">
+                <button class="btn btn-primary" id="upgrade-rank-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6" />
+                    </svg>
+                    Upgrade Rank
+                </button>
+                <button class="btn btn-secondary" id="add-cash-btn">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">                        
+						<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                    </svg>
+                    Add Cash
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="boost_event.js"></script>
+</body>
+</html>
