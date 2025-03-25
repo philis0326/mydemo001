@@ -42,12 +42,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 
         // Add button event listeners
         document.getElementById('add-cash-btn').addEventListener('click', function() {
-            alert('Redirecting to add cash page...');
-            // window.location.href = '/add-cash';
+            alert('Redirecting to add cash page...');            
         });
                 
         document.getElementById('upgrade-rank-btn').addEventListener('click', function() {            
-            window.location.href = '/points.html';
+            window.location.href = 'points.html';
         });
     }
             
