@@ -8,14 +8,14 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 	
 	const userData = {
-        yesterdayBalance: ('yesterdayBalance' in localStorage) ? localStorage.getItem('yesterdayBalance'):50.75,
-        dailyEarning: ('dailyEarning' in localStorage) ? localStorage.getItem('dailyEarning'):0.036,
-        lastWeekRank: ('lastWeekRank' in localStorage) ? localStorage.getItem('lastWeekRank'):'Starter',
-        currentWeekRank: ('currentWeekRank' in localStorage) ? localStorage.getItem('currentWeekRank'):'Mover',               
+        yesterdayBalance: 50.75,
+        dailyEarning: 0.036,
+        lastWeekRank: 'Starter',
+        currentWeekRank: 'Mover',               
     };
 	
 	for (let key in userData){
-		localStorage.setItem(key,userData[key]);
+		key in localStorage ? userData[key] = localStorage.getItem(key) : localStorage.setItem(key,userData[key]);
 	}
 	userData.appliedRate = ranks[userData.lastWeekRank]['rate'];
 	userData.projectedRate = ranks[userData.currentWeekRank]['rate'];
@@ -42,11 +42,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 
         // Add button event listeners
         document.getElementById('add-cash-btn').addEventListener('click', function() {
-            alert('Redirecting to add cash page...');            
+            alert('Redirecting to add cash page...');
+            // window.location.href = '/add-cash';
         });
                 
         document.getElementById('upgrade-rank-btn').addEventListener('click', function() {            
-            window.location.href = 'points.html';
+            window.location.href = '/points.html';
         });
     }
             
