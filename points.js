@@ -2,10 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const userData = {
         lastWeek: {
-            score: ('lastWeekScore' in localStorage) ? parseFloat(localStorage.getItem('lastWeekScore')) : 99
+            score: 99
         },
         currentWeek: {
-            score: ('currentWeekScore' in localStorage) ? parseFloat(localStorage.getItem('currentWeekScore')) : 222,            
+            score: 177,            
             points: [
                 {
                     id: 'add-cash',
@@ -66,8 +66,8 @@ document.addEventListener('DOMContentLoaded', function() {
             ]
         }
     };
-	'lastWeekScore' in localStorage ? '' : localStorage.setItem('lastWeekScore', userData.lastWeek.score);
-	'currentWeekScore' in localStorage ? '' : localStorage.setItem('currentWeekScore', userData.currentWeek.score);
+	'lastWeekScore' in localStorage ? userData.lastWeek.score = parseFloat(localStorage.getItem('lastWeekScore')) : localStorage.setItem('lastWeekScore', userData.lastWeek.score);
+	'currentWeekScore' in localStorage ? userData.currentWeek.score = parseFloat(localStorage.getItem('currentWeekScore')) : localStorage.setItem('currentWeekScore', userData.currentWeek.score);
 	userData.currentWeek.points.forEach(pts => {		
 		pts.id in localStorage ? pts.current = parseFloat(localStorage.getItem('billPayments')) : localStorage.setItem(pts.id, pts.current);
 	});	
