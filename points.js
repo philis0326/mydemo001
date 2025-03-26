@@ -9,30 +9,30 @@ document.addEventListener('DOMContentLoaded', function() {
             score: 125,
             rank: 'Shaker',
             nextRank: 'Master',
-            nextRankRequired: 200,
+            nextRankRequired: 300,
             points: [
                 {
                     id: 'add-cash',
                     title: 'Add cash',
                     current: 15,
                     max: 30,
-                    description: '<p>Deposit funds to your Minipay wallet to gain points.</p>Weekly limit: 30 points.',
+                    description: 'Earn points for each deposit',
                     color: 'linear-gradient(to right, #00CEFF, #6C5CE7)'
                 },
                 {
                     id: 'referrals',
-                    title: 'Referrals',
+                    title: 'Refer Friends',
                     current: 30,
                     max: 30,
-                    description: '<p>Earn points for each valid referral.</p> Weekly limit: 30 points.',
+                    description: 'Each valid referral earns points',
                     color: 'linear-gradient(to right, #00B894, #00CEFF)'
                 },
 				{
                     id: 'balance',
-                    title: 'Holding balance',
+                    title: 'Hold a Higher Balance',
                     current: 20,
                     max: 100,
-                    description: '<p>Hold your balance to win points.</p> Weekly limit: 100 points.',
+                    description: 'The more you hold, the more points you gain',
                     color: ''
                 },
 				{
@@ -40,38 +40,45 @@ document.addEventListener('DOMContentLoaded', function() {
                     title: 'P2P transactions',
                     current: 9,
                     max: 20,
-                    description: '<p>Earn points for sending transactions.</p> Weekly limit: 20 points.',
+                    description: 'Send transactions.',
                     color: ''
                 },
 				{
                     id: 'crossBorder',
-                    title: 'Cross-border Sends',
+                    title: 'Cross-border transactions',
                     current: 25,
                     max: 50,
-                    description: '<p>Earn points for sending cross-border transactions.</p> Weekly limit: 50 points.',
+                    description: 'Send cross-border transactions.',
                     color: ''
                 },
                 {
                     id: 'appUsage',
-                    title: 'Mini App Usage',
+                    title: 'Daily tasks',
                     current: 42,
                     max: 70,
-                    description: '<p>Use Mini Apps to complete transactions and earn points.</p> Weekly limit: 70 points.',
+                    description: 'Earn points by completing daily tasks',
                     color: 'linear-gradient(to right, #FDCB6E, #00B894)'
                 },
                 {
                     id: 'billPayments',
-                    title: 'Bill Payments',
+                    title: 'Spend Stablecoins',
                     current: 20,
                     max: 100,
-                    description: '<p>Pay bills with MiniPay to earn points.</p> Weekly limit: 100 points.',
+                    description: 'Level up when you spend with Mini Apps',
                     color: 'linear-gradient(to right, #FF7675, #FDCB6E)'
                 }
             ]
         }
     };
+	    
+	// Calculate progress percentage	
+	const progressPercent = (userData.currentWeek.score / userData.currentWeek.nextRankRequired) * 100;
+  
+	// Update progress bar
+	document.querySelector('.progress-fill').style.width = `${Math.min(progressPercent, 100)}%`;
+	
 	initPage();
-            // Function to generate a random color
+	
     function getRandomColor() {
         const colors = [
             'linear-gradient(to right, #00CEFF, #6C5CE7)',
@@ -88,24 +95,20 @@ document.addEventListener('DOMContentLoaded', function() {
         const container = document.getElementById('points-breakdown-container');
         container.innerHTML = '';
                 
-        points.forEach((point, index) => {
-            const progress = (point.current / point.max) * 100;
+        points.forEach((point, index) => {            
+			const isCapped = point.current >= point.max;
             const pointElement = document.createElement('div');
+			pointElement.className = `progress-container ${isCapped ? 'capped' : ''}`;
                     
-            pointElement.innerHTML = `
-                <div class="progress-container">
+            pointElement.innerHTML = `                
                     <div class="progress-header">
                         <span class="progress-title">${point.title}</span>
-                        <span class="progress-stats">${point.current}/${point.max} pts</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" style="width: ${progress}%; background: ${point.color || getRandomColor()}"></div>
-                    </div>
+						<span class=${isCapped ? "capped-badge" : 'noncapped-badge'}>${isCapped ? "Max reached" : "Available"}</span>	                        
+                    </div>                    
                     <div class="progress-description">
-                        ${point.description}
-                    </div>
-                    ${index < points.length - 1 ? '<div class="divider"></div>' : ''}
-                </div>
+                        <span>${point.description}</span>												
+                    </div>					
+                    ${index < points.length - 1 ? '<div class="divider"></div>' : ''}                
             `;
                     
             container.appendChild(pointElement);
@@ -113,14 +116,24 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 	
     
-	function initPage() {
-        // 使用更可靠的选择器路径
+	function initPage() {        
         const lastWeekScore = document.getElementById('lastRankInfo').firstElementChild.lastElementChild;
-		const currentWeekScore = document.getElementById('currentRankInfo').firstElementChild.lastElementChild;
+		const lastWeekRank = document.getElementById('lastRankInfo').lastElementChild.lastElementChild;
+		const currentWeekScore = document.querySelector('.rank-milestones').firstElementChild.lastElementChild;
+		const currentWeekRank = document.querySelector('.rank-milestones').firstElementChild.firstElementChild;
+		const nextRankRequiredScore = document.querySelector('.rank-milestones').lastElementChild.lastElementChild;
+		const nextRank = document.querySelector('.rank-milestones').lastElementChild.firstElementChild;
 		
 		lastWeekScore.textContent = `${userData.lastWeek.score} pts`;
+		lastWeekRank.textContent = userData.lastWeek.rank;
+		lastWeekRank.classList.add(userData.lastWeek.rank.toLowerCase());
         currentWeekScore.textContent = `${userData.currentWeek.score} pts`;
-        
+		currentWeekRank.textContent = userData.currentWeek.rank;
+		currentWeekRank.classList.add(userData.currentWeek.rank.toLowerCase());
+        nextRankRequiredScore.textContent = `${userData.currentWeek.nextRankRequired} pts`;
+		nextRank.textContent = userData.currentWeek.nextRank;
+		nextRank.classList.add(userData.currentWeek.nextRank.toLowerCase());
+		
         // 设置下一等级要求
         const nextRankElement = document.querySelector('.next-rank-value');
         if (nextRankElement) {
