@@ -2,14 +2,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     const userData = {
         lastWeek: {
-            score: 99,
-            rank: 'Mover'
+            score: ('lastWeekScore' in localStorage) ? parseFloat(localStorage.getItem('lastWeekScore')) : 99
         },
         currentWeek: {
-            score: 125,
-            rank: 'Shaker',
-            nextRank: 'Master',
-            nextRankRequired: 300,
+            score: ('currentWeekScore' in localStorage) ? parseFloat(localStorage.getItem('currentWeekScore')) : 222,            
             points: [
                 {
                     id: 'add-cash',
@@ -38,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
 				{
                     id: 'p2p',
                     title: 'P2P transactions',
-                    current: 9,
+                    current: 12,
                     max: 20,
                     description: 'Send transactions.',
                     color: ''
@@ -70,10 +66,20 @@ document.addEventListener('DOMContentLoaded', function() {
             ]
         }
     };
-	    
+	'lastWeekScore' in localStorage ? '' : localStorage.setItem('lastWeekScore', userData.lastWeek.score);
+	'currentWeekScore' in localStorage ? '' : localStorage.setItem('currentWeekScore', userData.currentWeek.score);
+	userData.currentWeek.points.forEach(pts => {		
+		pts.id in localStorage ? pts.current = parseFloat(localStorage.getItem('billPayments')) : localStorage.setItem(pts.id, pts.current);
+	});	
+	
+	userData.lastWeek.rank = getUserLevelDetails(userData.lastWeek.score).currentLevel;
+	userData.currentWeek.rank = getUserLevelDetails(userData.currentWeek.score).currentLevel;
+	userData.currentWeek.nextRank = getUserLevelDetails(userData.currentWeek.score).nextLevel;
+	userData.currentWeek.nextRankRequired = getUserLevelDetails(userData.currentWeek.score).neededForNext;
+	
 	// Calculate progress percentage	
-	const progressPercent = (userData.currentWeek.score / userData.currentWeek.nextRankRequired) * 100;
-  
+	const progressPercent = userData.currentWeek.score / (userData.currentWeek.score + userData.currentWeek.nextRankRequired) * 100;
+    
 	// Update progress bar
 	document.querySelector('.progress-fill').style.width = `${Math.min(progressPercent, 100)}%`;
 	
@@ -115,6 +121,33 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 	
+	function getUserLevelDetails(score) {
+		const levels = [
+			{ name: "Starter", min: 0, max: 50 },
+			{ name: "Mover", min: 51, max: 150 },
+			{ name: "Shaker", min: 151, max: 300 },
+			{ name: "Master", min: 301, max: Infinity } // 最高等级
+		];
+
+		// 找到当前等级
+		const current = levels.find(l => score >= l.min && score <= l.max);
+		const currentLevel = current?.name || "Starter";
+
+		// 找到下一个等级
+		const currentIndex = levels.findIndex(l => l.name === currentLevel);
+		const next = levels[currentIndex + 1]; // 可能为 undefined（最高等级时）
+
+		// 处理最高等级的情况
+		const isMaxLevel = currentLevel === "Master";
+		const nextLevel = isMaxLevel ? "Max" : next?.name;
+		const neededForNext = isMaxLevel ? 0 : next ? next.min - score : 0;
+
+		return {
+			currentLevel,
+			nextLevel,      // 最高等级时返回 null
+			neededForNext   // 最高等级时返回 0
+		};
+	}
     
 	function initPage() {        
         const lastWeekScore = document.getElementById('lastRankInfo').firstElementChild.lastElementChild;
@@ -130,9 +163,10 @@ document.addEventListener('DOMContentLoaded', function() {
         currentWeekScore.textContent = `${userData.currentWeek.score} pts`;
 		currentWeekRank.textContent = userData.currentWeek.rank;
 		currentWeekRank.classList.add(userData.currentWeek.rank.toLowerCase());
-        nextRankRequiredScore.textContent = `${userData.currentWeek.nextRankRequired} pts`;
+		const isMax = userData.currentWeek.nextRank === "Max";
+        nextRankRequiredScore.textContent = isMax ? "Max reached" : `${userData.currentWeek.nextRankRequired} pts left`;
 		nextRank.textContent = userData.currentWeek.nextRank;
-		nextRank.classList.add(userData.currentWeek.nextRank.toLowerCase());
+		nextRank.classList.add(isMax ? "master" :userData.currentWeek.nextRank.toLowerCase());
 		
         // 设置下一等级要求
         const nextRankElement = document.querySelector('.next-rank-value');
