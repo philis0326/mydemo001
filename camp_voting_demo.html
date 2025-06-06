@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EthCC - MiniPay X Celo Camp Voting</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #1a2a6c, #2a9d8f, #b21f1f);
+            color: #333;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 500px;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            padding: 25px;
+        }
+        
+        .event-header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+            position: relative;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        
+        .main-event {
+            align-self: flex-start;
+            background: #1a2a6c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+        }
+        
+        .voting-event {
+            text-align: center;
+            background: linear-gradient(90deg, #2a9d8f, #b21f1f);
+            color: white;
+            padding: 12px 30px;
+            border-radius: 40px;
+            font-size: 1.4rem;
+            font-weight: bold;
+            margin: 5px 0 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 350px;
+        }
+        
+        .date-display {
+            background: #1a2a6c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 600;
+            margin-top: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        
+        .user-info {
+            position: absolute;
+            top: 0;
+            right: 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #f0f8ff;
+            padding: 8px 15px;
+            border-radius: 30px;
+            border: 1px solid #1a2a6c;
+        }
+        
+        .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #2a9d8f, #b21f1f);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
+        
+        .projects-container {
+            margin: 20px 0;
+        }
+        
+        .project-card {
+            background: white;
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+            border-left: 5px solid #2a9d8f;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .project-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, #1a2a6c, #2a9d8f);
+        }
+        
+        .project-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+        }
+        
+        .project-title {
+            font-size: 1.4rem;
+            color: #1a2a6c;
+            margin-bottom: 12px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .project-description {
+            color: #555;
+            margin-bottom: 20px;
+            line-height: 1.6;
+            font-size: 1rem;
+        }
+        
+        .vote-btn {
+            background: linear-gradient(90deg, #1a2a6c, #2a9d8f);
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-size: 1.05rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            margin-top: 10px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .vote-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(26, 42, 108, 0.4);
+        }
+        
+        .voted {
+            background: linear-gradient(90deg, #2a9d8f, #1a2a6c);
+        }
+        
+        .vote-disabled {
+            background: #e0e0e0;
+            color: #888;
+            cursor: not-allowed;
+        }
+        
+        .vote-disabled:hover {
+            transform: none;
+            box-shadow: none;
+        }
+        
+        .results-section {
+            margin-top: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+        }
+        
+        .results-title {
+            text-align: center;
+            color: #1a2a6c;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .chart-container {
+            height: 250px;
+            position: relative;
+            margin-top: 20px;
+        }
+        
+        .vote-count {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: #1a2a6c;
+            color: white;
+            border-radius: 20px;
+            padding: 5px 15px;
+            font-size: 1rem;
+            font-weight: bold;
+            margin-left: 10px;
+            min-width: 70px;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #2a9d8f;
+            color: white;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+            transform: translateX(120%);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .progress-bar {
+            height: 4px;
+            background: rgba(255,255,255,0.5);
+            width: 100%;
+            border-radius: 2px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: white;
+            width: 100%;
+            animation: progress 3s linear forwards;
+        }
+        
+        @keyframes progress {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            color: #666;
+            font-size: 0.9rem;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .voting-event {
+                font-size: 1.2rem;
+                padding: 10px 20px;
+            }
+            
+            .project-title {
+                font-size: 1.25rem;
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 8px;
+            }
+            
+            .vote-count {
+                margin-left: 0;
+            }
+            
+            .chart-container {
+                height: 220px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="event-header">
+            <div class="main-event">ETHCC</div>
+            <div class="voting-event">MiniPay X Celo Camp Voting</div>
+            <div class="date-display" id="currentDate">June 15, 2023 - Friday</div>
+            <div class="user-info">
+                <div class="user-avatar">JD</div>
+                <span>John Doe</span>
+            </div>
+        </div>
+        
+        <div class="projects-container" id="projectsContainer">
+            <!-- Project cards will be dynamically generated -->
+        </div>
+        
+        <div class="results-section">
+            <h2 class="results-title">Live Voting Results</h2>
+            <div class="chart-container">
+                <canvas id="resultsChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <p>© 2023 EthCC - MiniPay X Celo Camp | Each participant can vote only once</p>
+        </div>
+    </div>
+    
+    <div class="notification" id="notification">
+        <i class="fas fa-check-circle"></i>
+        <div>
+            <div>Your vote has been recorded!</div>
+            <div class="progress-bar"><div class="progress"></div></div>
+        </div>
+    </div>
+
+    <script>
+        // Get and format current date
+        function getCurrentDate() {
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long' 
+            };
+            return now.toLocaleDateString('en-US', options);
+        }
+        
+        // Set current date display
+        document.getElementById('currentDate').textContent = getCurrentDate();
+        
+        // Project data
+        const projects = [
+            { 
+                id: 1, 
+                name: "CeloPay Wallet", 
+                description: "A mobile-first crypto wallet with seamless fiat on-ramp and off-ramp capabilities, integrated with MiniPay for instant transactions.",
+                votes: 42 
+            },
+            { 
+                id: 2, 
+                name: "DeFi Savings Protocol", 
+                description: "A decentralized savings protocol that offers high-yield interest accounts using stablecoins on the Celo network with MiniPay integration.",
+                votes: 28 
+            },
+            { 
+                id: 3, 
+                name: "NFT Marketplace", 
+                description: "A gasless NFT marketplace built on Celo, allowing creators to mint and sell digital assets with zero transaction fees using MiniPay.",
+                votes: 35 
+            },
+            { 
+                id: 4, 
+                name: "Cross-Chain Bridge", 
+                description: "A trustless bridge between Celo and Ethereum networks enabling seamless asset transfers with MiniPay for fee payments.",
+                votes: 19 
+            }
+        ];
+        
+        // User state (simulated from app)
+        const currentUser = {
+            id: "user-12345",
+            name: "John Doe",
+            avatar: "JD"
+        };
+        
+        let hasVoted = false;
+        
+        // DOM elements
+        const projectsContainer = document.getElementById('projectsContainer');
+        const notification = document.getElementById('notification');
+        
+        // Initialize chart
+        const ctx = document.getElementById('resultsChart').getContext('2d');
+        const resultsChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: projects.map(p => p.name),
+                datasets: [{
+                    label: 'Votes',
+                    data: projects.map(p => p.votes),
+                    backgroundColor: [
+                        'rgba(42, 157, 143, 0.8)',
+                        'rgba(26, 42, 108, 0.8)',
+                        'rgba(178, 31, 31, 0.8)',
+                        'rgba(242, 177, 52, 0.8)'
+                    ],
+                    borderColor: [
+                        'rgba(42, 157, 143, 1)',
+                        'rgba(26, 42, 108, 1)',
+                        'rgba(178, 31, 31, 1)',
+                        'rgba(242, 177, 52, 1)'
+                    ],
+                    borderWidth: 1,
+                    borderRadius: 8,
+                    borderSkipped: false
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: {
+                            color: 'rgba(0,0,0,0.05)'
+                        },
+                        ticks: {
+                            precision: 0,
+                            font: {
+                                weight: 'bold'
+                            }
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false
+                        },
+                        ticks: {
+                            font: {
+                                size: 11,
+                                weight: 'bold'
+                            }
+                        }
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(26, 42, 108, 0.9)',
+                        titleFont: {
+                            size: 14
+                        },
+                        bodyFont: {
+                            size: 13
+                        },
+                        padding: 12,
+                        displayColors: false
+                    }
+                }
+            }
+        });
+        
+        // Show notification
+        function showNotification(message) {
+            notification.innerHTML = `
+                <i class="fas fa-check-circle"></i>
+                <div>
+                    <div>${message}</div>
+                    <div class="progress-bar"><div class="progress"></div></div>
+                </div>
+            `;
+            notification.classList.add('show');
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+        
+        // Render project cards
+        function renderProjects() {
+            projectsContainer.innerHTML = '';
+            
+            projects.forEach(project => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                
+                const voteCount = `<div class="vote-count"><i class="fas fa-vote-yea"></i> ${project.votes} votes</div>`;
+                
+                projectCard.innerHTML = `
+                    <div class="project-title">
+                        <div>${project.name}</div>
+                        ${voteCount}
+                    </div>
+                    <p class="project-description">${project.description}</p>
+                    <button class="vote-btn ${hasVoted ? 'vote-disabled' : ''}" 
+                            data-id="${project.id}" 
+                            ${hasVoted ? 'disabled' : ''}>
+                        <i class="fas fa-vote-yea"></i>
+                        ${hasVoted ? 'Vote Recorded' : 'Vote for this Project'}
+                    </button>
+                `;
+                
+                projectsContainer.appendChild(projectCard);
+            });
+            
+            // Add vote event listeners
+            document.querySelectorAll('.vote-btn:not(.vote-disabled)').forEach(btn => {
+                btn.addEventListener('click', handleVote);
+            });
+        }
+        
+        // Handle vote
+        function handleVote(e) {
+            if (hasVoted) {
+                showNotification('You have already voted!');
+                return;
+            }
+            
+            const projectId = parseInt(e.target.dataset.id);
+            const project = projects.find(p => p.id === projectId);
+            
+            if (project) {
+                // Simulate API call to record vote
+                setTimeout(() => {
+                    project.votes++;
+                    hasVoted = true;
+                    
+                    // Update chart
+                    resultsChart.data.datasets[0].data = projects.map(p => p.votes);
+                    resultsChart.update();
+                    
+                    // Update UI
+                    renderProjects();
+                    showNotification(`Vote recorded for "${project.name}"`);
+                }, 500);
+            }
+        }
+        
+        // Initialize the page
+        renderProjects();
+        
+        // Simulate loading user data from the app
+        document.addEventListener('DOMContentLoaded', () => {
+            // In a real app, this would come from the parent app
+            document.querySelector('.user-avatar').textContent = currentUser.avatar;
+            document.querySelector('.user-info span').textContent = currentUser.name;
+        });
+    </script>
+</body>
+</html>
