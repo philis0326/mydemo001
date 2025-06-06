@@ -1,0 +1,534 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EthCC - MiniPay X Celo Camp Live Results</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0c1a3a, #1d3b5f);
+            --accent-blue: #4facfe;
+            --accent-teal: #00f2fe;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --text-primary: white;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+        
+        body {
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .event-info {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        
+        .event-title {
+            font-size: clamp(1.8rem, 5vw, 2.5rem);
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .voting-title {
+            font-size: clamp(1.3rem, 3vw, 1.8rem);
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+        
+        .date-display {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            font-weight: 600;
+            color: var(--accent-teal);
+        }
+        
+        .header-bottom {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 15px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-title {
+            font-size: clamp(1rem, 2vw, 1.2rem);
+            margin-bottom: 10px;
+            color: #a0d2ff;
+        }
+        
+        .stat-value {
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 25px;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .chart-title {
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--accent-blue);
+        }
+        
+        .chart-container {
+            height: 300px;
+            position: relative;
+            width: 100%;
+        }
+        
+        .projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        
+        .project-card {
+            background: var(--card-bg);
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .project-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+        }
+        
+        .project-rank {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.2);
+        }
+        
+        .project-title {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            margin-bottom: 15px;
+            color: #a0d2ff;
+            padding-right: 50px;
+            word-break: break-word;
+        }
+        
+        .project-description {
+            color: var(--text-secondary);
+            margin-bottom: 0;
+            font-size: clamp(0.85rem, 1.5vw, 1rem);
+            line-height: 1.5;
+            word-break: break-word;
+        }
+        
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #e74c3c;
+            color: white;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-weight: 700;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        
+        .update-timer {
+            color: var(--accent-teal);
+            font-weight: 700;
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+        }
+        
+        .footer {
+            text-align: center;
+            padding: 15px;
+            margin-top: 25px;
+            font-size: clamp(0.8rem, 1.5vw, 1rem);
+            color: var(--text-secondary);
+        }
+        
+        @media (min-width: 768px) {
+            .header-bottom {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+            
+            .stats-container {
+                grid-template-columns: repeat(3, 1fr);
+            }
+            
+            .chart-container {
+                height: 400px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 15px;
+                border-radius: 15px;
+            }
+            
+            .header {
+                padding: 15px;
+            }
+            
+            .chart-container {
+                height: 250px;
+            }
+            
+            .project-title {
+                padding-right: 40px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="event-info">
+                <div class="event-title">ETHCC 2025</div>
+                <div class="voting-title">MiniPay X Celo Camp Voting</div>
+                <div class="date-display" id="currentDate">July 19, 2025 - Wednesday</div>
+            </div>
+            
+            <div class="header-bottom">
+                <div class="live-indicator">
+                    <h1>LIVE RESULTS</h1>
+                    <span class="live-badge"><i class="fas fa-circle"></i> LIVE</span>
+                </div>
+                <div class="update-timer">Next update in: <span id="countdown">5</span> seconds</div>
+            </div>
+        </div>
+        
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-title">Total Votes</div>
+                <div class="stat-value" id="totalVotes">124</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Leading Project</div>
+                <div class="stat-value" id="leadingProject">CeloPay Wallet</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-title">Time Remaining</div>
+                <div class="stat-value" id="timeRemaining">2:15:30</div>
+            </div>
+        </div>
+        
+        <div class="chart-card">
+            <h2 class="chart-title">Vote Distribution</h2>
+            <div class="chart-container">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div>
+        
+        <div class="projects-container" id="projectsContainer">
+            <!-- Project cards will be dynamically generated -->
+        </div>
+        
+        <div class="footer">
+            <p>© 2025 EthCC - MiniPay X Celo Camp | Results update every 5 seconds</p>
+        </div>
+    </div>
+
+    <script>
+        // Project data
+        let projects = [
+            { 
+                id: 1, 
+                name: "CeloPay Wallet", 
+                description: "A mobile-first crypto wallet with seamless fiat on-ramp and off-ramp capabilities.",
+                votes: 42,
+                rank: 1
+            },
+            { 
+                id: 2, 
+                name: "DeFi Savings Protocol", 
+                description: "Decentralized savings protocol offering high-yield interest accounts using stablecoins.",
+                votes: 28,
+                rank: 3
+            },
+            { 
+                id: 3, 
+                name: "NFT Marketplace", 
+                description: "Gasless NFT marketplace allowing creators to mint and sell digital assets with zero fees.",
+                votes: 35,
+                rank: 2
+            },
+            { 
+                id: 4, 
+                name: "Cross-Chain Bridge", 
+                description: "Trustless bridge between Celo and Ethereum networks enabling seamless asset transfers.",
+                votes: 19,
+                rank: 4
+            }
+        ];
+        
+        // Initialize chart
+        function initBarChart() {
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            const barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: projects.map(p => p.name),
+                    datasets: [{
+                        label: 'Votes',
+                        data: projects.map(p => p.votes),
+                        backgroundColor: [
+                            'rgba(79, 172, 254, 0.8)',
+                            'rgba(0, 242, 254, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(79, 172, 254, 1)',
+                            'rgba(0, 242, 254, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 8,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                display: false // Hide y-axis values
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            enabled: false // Disable tooltips
+                        }
+                    },
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            });
+            return barChart;
+        }
+        
+        // Calculate and update stats
+        function updateStats() {
+            const totalVotes = projects.reduce((sum, project) => sum + project.votes, 0);
+            document.getElementById('totalVotes').textContent = totalVotes;
+            
+            const leadingProject = projects.reduce((prev, current) => 
+                (prev.votes > current.votes) ? prev : current
+            );
+            document.getElementById('leadingProject').textContent = leadingProject.name;
+        }
+        
+        // Render project cards
+        function renderProjects() {
+            const projectsContainer = document.getElementById('projectsContainer');
+            projectsContainer.innerHTML = '';
+            
+            // Sort projects by votes
+            const sortedProjects = [...projects].sort((a, b) => b.votes - a.votes);
+            
+            sortedProjects.forEach((project, index) => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'project-card';
+                projectCard.innerHTML = `
+                    <div class="project-rank">#${index + 1}</div>
+                    <h3 class="project-title">${project.name}</h3>
+                    <p class="project-description">${project.description}</p>
+                `;
+                
+                projectsContainer.appendChild(projectCard);
+            });
+        }
+        
+        // Simulate vote updates
+        function updateVotes() {
+            // Add random votes to simulate real-time updates
+            projects.forEach(project => {
+                if (Math.random() > 0.3) {
+                    const newVotes = Math.floor(Math.random() * 3) + 1;
+                    project.votes += newVotes;
+                }
+            });
+            
+            // Update chart
+            barChart.data.datasets[0].data = projects.map(p => p.votes);
+            barChart.update();
+            
+            // Update stats
+            updateStats();
+            
+            // Re-render projects with new data
+            renderProjects();
+            
+            // Reset countdown
+            resetCountdown();
+        }
+        
+        // Countdown timer
+        let countdown = 5;
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = countdown;
+            
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    updateVotes();
+                }
+            }, 1000);
+        }
+        
+        function resetCountdown() {
+            countdown = 5;
+            startCountdown();
+        }
+        
+        // Initialize the page
+        let barChart;
+        document.addEventListener('DOMContentLoaded', () => {
+            // Set current date
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long' 
+            };
+            document.getElementById('currentDate').textContent = now.toLocaleDateString('en-US', options);
+            
+            // Initialize chart
+            barChart = initBarChart();
+            
+            // Initial render
+            updateStats();
+            renderProjects();
+            
+            // Start the countdown
+            startCountdown();
+            
+            // Update time remaining every minute
+            setInterval(() => {
+                const hours = 18 - now.getHours();
+                const minutes = 60 - now.getMinutes();
+                const seconds = 60 - now.getSeconds();
+                document.getElementById('timeRemaining').textContent = 
+                    `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
