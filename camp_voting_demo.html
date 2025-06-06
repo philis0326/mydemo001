@@ -14,88 +14,136 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         
+        :root {
+            --primary-gradient: linear-gradient(135deg, #0c1a3a, #1d3b5f);
+            --accent-blue: #4facfe;
+            --accent-teal: #00f2fe;
+            --accent-green: #46cf71;
+            --accent-purple: #9b59b6;
+            --card-bg: rgba(255, 255, 255, 0.08);
+            --text-primary: white;
+            --text-secondary: rgba(255, 255, 255, 0.7);
+        }
+        
         body {
             background: linear-gradient(135deg, #1a2a6c, #2a9d8f, #b21f1f);
             color: #333;
             min-height: 100vh;
-            padding: 20px;
             display: flex;
             justify-content: center;
             align-items: center;
+            padding: 20px;
         }
         
-        .container {
+        .app-container {
+            display: flex;
+            flex-direction: column;
             width: 100%;
-            max-width: 500px;
+            max-width: 1200px;
+            gap: 40px;
+        }
+        
+        .page-header {
+            text-align: center;
+            padding: 20px;
             background: rgba(255, 255, 255, 0.95);
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            overflow: hidden;
-            padding: 25px;
         }
         
-        .event-header {
+        .event-info {
             display: flex;
             flex-direction: column;
             align-items: center;
-            margin-bottom: 20px;
-            position: relative;
-            padding-bottom: 20px;
-            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 15px;
         }
         
         .main-event {
-            align-self: flex-start;
             background: #1a2a6c;
             color: white;
-            padding: 8px 20px;
+            padding: 8px 25px;
             border-radius: 30px;
             font-weight: bold;
-            font-size: 1.2rem;
-            margin-bottom: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: inline-block;
         }
         
         .voting-event {
-            text-align: center;
             background: linear-gradient(90deg, #2a9d8f, #b21f1f);
             color: white;
-            padding: 12px 30px;
+            padding: 12px 35px;
             border-radius: 40px;
-            font-size: 1.4rem;
+            font-size: 1.8rem;
             font-weight: bold;
-            margin: 5px 0 15px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 350px;
+            margin: 10px 0 20px;
+            max-width: 500px;
         }
         
         .date-display {
             background: #1a2a6c;
             color: white;
-            padding: 8px 20px;
+            padding: 10px 25px;
             border-radius: 30px;
             font-weight: 600;
-            margin-top: 10px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            font-size: 1.2rem;
+            display: inline-block;
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+            gap: 20px;
+        }
+        
+        .tab {
+            padding: 12px 30px;
+            background: #f0f0f0;
+            border-radius: 30px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            border: 2px solid #ddd;
+        }
+        
+        .tab.active {
+            background: #1a2a6c;
+            color: white;
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        
+        .page-content {
+            display: flex;
+            flex-direction: column;
+            gap: 40px;
+        }
+        
+        /* Voting Page Styles */
+        .voting-page {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .voting-page.active {
+            display: block;
         }
         
         .user-info {
-            position: absolute;
-            top: 0;
-            right: 0;
             display: flex;
+            justify-content: flex-end;
             align-items: center;
-            gap: 10px;
-            background: #f0f8ff;
-            padding: 8px 15px;
-            border-radius: 30px;
-            border: 1px solid #1a2a6c;
+            gap: 15px;
+            margin-bottom: 20px;
         }
         
         .user-avatar {
-            width: 36px;
-            height: 36px;
+            width: 45px;
+            height: 45px;
             border-radius: 50%;
             background: linear-gradient(135deg, #2a9d8f, #b21f1f);
             color: white;
@@ -103,72 +151,61 @@
             align-items: center;
             justify-content: center;
             font-weight: bold;
-            font-size: 1.1rem;
+            font-size: 1.2rem;
         }
         
         .projects-container {
-            margin: 20px 0;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
         }
         
         .project-card {
             background: white;
             border-radius: 15px;
-            padding: 20px;
-            margin-bottom: 20px;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            border-left: 5px solid #2a9d8f;
+            padding: 25px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            border-left: 5px solid #2a9d8f;
             position: relative;
             overflow: hidden;
         }
         
-        .project-card:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 5px;
-            background: linear-gradient(90deg, #1a2a6c, #2a9d8f);
-        }
-        
         .project-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 25px rgba(0,0,0,0.15);
+            transform: translateY(-7px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
         }
         
         .project-title {
-            font-size: 1.4rem;
+            font-size: 1.5rem;
             color: #1a2a6c;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
+            margin-bottom: 15px;
+            min-height: 70px;
         }
         
         .project-description {
             color: #555;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             line-height: 1.6;
-            font-size: 1rem;
+            font-size: 1.05rem;
         }
         
         .vote-btn {
             background: linear-gradient(90deg, #1a2a6c, #2a9d8f);
             color: white;
             border: none;
-            padding: 12px 25px;
+            padding: 14px 25px;
             border-radius: 10px;
-            font-size: 1.05rem;
+            font-size: 1.1rem;
             font-weight: 600;
             cursor: pointer;
             transition: all 0.3s;
             width: 100%;
-            margin-top: 10px;
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 8px;
+            gap: 10px;
         }
         
         .vote-btn:hover {
@@ -189,42 +226,6 @@
         .vote-disabled:hover {
             transform: none;
             box-shadow: none;
-        }
-        
-        .results-section {
-            margin-top: 30px;
-            padding: 20px;
-            background: #f8f9fa;
-            border-radius: 15px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
-        }
-        
-        .results-title {
-            text-align: center;
-            color: #1a2a6c;
-            margin-bottom: 20px;
-            font-size: 1.5rem;
-            font-weight: 700;
-        }
-        
-        .chart-container {
-            height: 250px;
-            position: relative;
-            margin-top: 20px;
-        }
-        
-        .vote-count {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            background: #1a2a6c;
-            color: white;
-            border-radius: 20px;
-            padding: 5px 15px;
-            font-size: 1rem;
-            font-weight: bold;
-            margin-left: 10px;
-            min-width: 70px;
         }
         
         .notification {
@@ -248,116 +249,348 @@
             transform: translateX(0);
         }
         
-        .progress-bar {
-            height: 4px;
-            background: rgba(255,255,255,0.5);
-            width: 100%;
-            border-radius: 2px;
-            margin-top: 10px;
+        /* Results Page Styles */
+        .results-page {
+            display: none;
+            background: var(--primary-gradient);
+            color: var(--text-primary);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+        
+        .results-page.active {
+            display: block;
+        }
+        
+        .results-header {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .results-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        
+        .event-title {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .voting-title {
+            font-size: clamp(1.5rem, 3.5vw, 2.5rem);
+            font-weight: 700;
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+        }
+        
+        .results-header-bottom {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        
+        .live-indicator {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .stat-title {
+            font-size: clamp(1.2rem, 2vw, 1.5rem);
+            margin-bottom: 15px;
+            color: #a0d2ff;
+        }
+        
+        .stat-value {
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 800;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        
+        .chart-card {
+            background: var(--card-bg);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            margin-bottom: 30px;
+        }
+        
+        .chart-title {
+            font-size: clamp(1.5rem, 2.5vw, 2rem);
+            margin-bottom: 20px;
+            text-align: center;
+            color: var(--accent-blue);
+        }
+        
+        .chart-container {
+            height: 400px;
+            position: relative;
+        }
+        
+        .results-projects-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .results-project-card {
+            background: var(--card-bg);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            transition: transform 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            position: relative;
             overflow: hidden;
         }
         
-        .progress {
-            height: 100%;
-            background: white;
+        .results-project-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.12);
+        }
+        
+        .results-project-card:before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            animation: progress 3s linear forwards;
+            height: 6px;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-teal));
         }
         
-        @keyframes progress {
-            from { width: 100%; }
-            to { width: 0%; }
+        .project-rank {
+            position: absolute;
+            top: 15px;
+            right: 20px;
+            font-size: clamp(1.8rem, 4vw, 2.5rem);
+            font-weight: 800;
+            color: rgba(255, 255, 255, 0.2);
         }
         
-        .footer {
-            text-align: center;
-            margin-top: 25px;
-            color: #666;
-            font-size: 0.9rem;
-            padding-top: 15px;
-            border-top: 1px solid #eee;
+        .results-project-title {
+            font-size: clamp(1.4rem, 2.5vw, 1.8rem);
+            margin-bottom: 15px;
+            color: #a0d2ff;
+            min-height: 60px;
+            padding-right: 60px;
         }
         
-        @media (max-width: 480px) {
-            .container {
-                padding: 20px 15px;
+        .results-project-description {
+            color: var(--text-secondary);
+            margin-bottom: 20px;
+            font-size: clamp(0.9rem, 1.5vw, 1.1rem);
+            line-height: 1.6;
+        }
+        
+        .live-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #e74c3c;
+            color: white;
+            padding: 8px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            animation: pulse 1.5s infinite;
+        }
+        
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.6; }
+            100% { opacity: 1; }
+        }
+        
+        .update-timer {
+            color: var(--accent-teal);
+            font-weight: 700;
+            font-size: clamp(1rem, 2vw, 1.2rem);
+        }
+        
+        /* Animation for rank changes */
+        @keyframes highlight {
+            0% { background-color: rgba(79, 172, 254, 0); }
+            50% { background-color: rgba(79, 172, 254, 0.3); }
+            100% { background-color: rgba(79, 172, 254, 0); }
+        }
+        
+        .highlight {
+            animation: highlight 2s ease;
+        }
+        
+        /* Responsive adjustments */
+        @media (max-width: 1200px) {
+            .chart-container {
+                height: 350px;
+            }
+        }
+        
+        @media (max-width: 992px) {
+            .chart-container {
+                height: 400px;
+            }
+            
+            .header-bottom {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .app-container {
+                padding: 10px;
             }
             
             .voting-event {
-                font-size: 1.2rem;
-                padding: 10px 20px;
-            }
-            
-            .project-title {
-                font-size: 1.25rem;
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .vote-count {
-                margin-left: 0;
+                font-size: 1.5rem;
+                padding: 10px 25px;
             }
             
             .chart-container {
-                height: 220px;
+                height: 300px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .chart-container {
+                height: 250px;
+            }
+            
+            .project-title, .results-project-title {
+                min-height: auto;
+                padding-right: 40px;
+            }
+            
+            .tabs {
+                flex-direction: column;
+                align-items: center;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="event-header">
-            <div class="main-event">ETHCC</div>
-            <div class="voting-event">MiniPay X Celo Camp Voting</div>
-            <div class="date-display" id="currentDate">June 15, 2023 - Friday</div>
-            <div class="user-info">
-                <div class="user-avatar">JD</div>
-                <span>John Doe</span>
+    <div class="app-container">
+        <div class="page-header">
+            <div class="event-info">
+                <div class="main-event">ETHCC</div>
+                <div class="voting-event">MiniPay X Celo Camp Voting</div>
+                <div class="date-display" id="currentDate">July 19, 2025 - Wednesday</div>
+            </div>
+            
+            <div class="tabs">
+                <div class="tab active" data-page="voting">Voting</div>
+                <div class="tab" data-page="results">Live Results</div>
             </div>
         </div>
         
-        <div class="projects-container" id="projectsContainer">
-            <!-- Project cards will be dynamically generated -->
-        </div>
-        
-        <div class="results-section">
-            <h2 class="results-title">Live Voting Results</h2>
-            <div class="chart-container">
-                <canvas id="resultsChart"></canvas>
+        <div class="page-content">
+            <!-- Voting Page -->
+            <div class="voting-page active" id="votingPage">
+                <div class="user-info">
+                    <div class="user-avatar">JD</div>
+                    <span>John Doe</span>
+                </div>
+                
+                <div class="projects-container" id="projectsContainer">
+                    <!-- Project cards will be dynamically generated -->
+                </div>
+            </div>
+            
+            <!-- Results Page -->
+            <div class="results-page" id="resultsPage">
+                <div class="results-header">
+                    <div class="results-title">
+                        <div class="event-title">ETHCC 2025</div>
+                        <div class="voting-title">MiniPay X Celo Camp Voting</div>
+                        <div class="date-display" id="resultsDate">July 19, 2025 - Wednesday</div>
+                    </div>
+                    
+                    <div class="results-header-bottom">
+                        <div class="live-indicator">
+                            <h1>LIVE RESULTS</h1>
+                            <span class="live-badge"><i class="fas fa-circle"></i> LIVE</span>
+                        </div>
+                        <div class="update-timer">Next update in: <span id="countdown">5</span> seconds</div>
+                    </div>
+                </div>
+                
+                <div class="stats-container">
+                    <div class="stat-card">
+                        <div class="stat-title">Total Votes</div>
+                        <div class="stat-value" id="totalVotes">124</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Leading Project</div>
+                        <div class="stat-value" id="leadingProject">CeloPay Wallet</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title">Time Remaining</div>
+                        <div class="stat-value" id="timeRemaining">2:15:30</div>
+                    </div>
+                </div>
+                
+                <div class="chart-card">
+                    <h2 class="chart-title">Vote Distribution</h2>
+                    <div class="chart-container">
+                        <canvas id="barChart"></canvas>
+                    </div>
+                </div>
+                
+                <div class="results-projects-container" id="resultsProjectsContainer">
+                    <!-- Project cards for results will be dynamically generated -->
+                </div>
             </div>
         </div>
         
-        <div class="footer">
-            <p>© 2023 EthCC - MiniPay X Celo Camp | Each participant can vote only once</p>
-        </div>
-    </div>
-    
-    <div class="notification" id="notification">
-        <i class="fas fa-check-circle"></i>
-        <div>
+        <div class="notification" id="notification">
+            <i class="fas fa-check-circle"></i>
             <div>Your vote has been recorded!</div>
-            <div class="progress-bar"><div class="progress"></div></div>
         </div>
     </div>
 
     <script>
-        // Get and format current date
-        function getCurrentDate() {
-            const now = new Date();
-            const options = { 
-                year: 'numeric', 
-                month: 'long', 
-                day: 'numeric', 
-                weekday: 'long' 
-            };
-            return now.toLocaleDateString('en-US', options);
-        }
-        
-        // Set current date display
-        document.getElementById('currentDate').textContent = getCurrentDate();
-        
-        // Project data
+        // Project data for voting page
         const projects = [
             { 
                 id: 1, 
@@ -385,6 +618,9 @@
             }
         ];
         
+        // Project data for results page
+        let resultsProjects = JSON.parse(JSON.stringify(projects));
+        
         // User state (simulated from app)
         const currentUser = {
             id: "user-12345",
@@ -396,97 +632,112 @@
         
         // DOM elements
         const projectsContainer = document.getElementById('projectsContainer');
+        const resultsProjectsContainer = document.getElementById('resultsProjectsContainer');
         const notification = document.getElementById('notification');
+        const tabs = document.querySelectorAll('.tab');
+        const votingPage = document.getElementById('votingPage');
+        const resultsPage = document.getElementById('resultsPage');
         
-        // Initialize chart
-        const ctx = document.getElementById('resultsChart').getContext('2d');
-        const resultsChart = new Chart(ctx, {
-            type: 'bar',
-            data: {
-                labels: projects.map(p => p.name),
-                datasets: [{
-                    label: 'Votes',
-                    data: projects.map(p => p.votes),
-                    backgroundColor: [
-                        'rgba(42, 157, 143, 0.8)',
-                        'rgba(26, 42, 108, 0.8)',
-                        'rgba(178, 31, 31, 0.8)',
-                        'rgba(242, 177, 52, 0.8)'
-                    ],
-                    borderColor: [
-                        'rgba(42, 157, 143, 1)',
-                        'rgba(26, 42, 108, 1)',
-                        'rgba(178, 31, 31, 1)',
-                        'rgba(242, 177, 52, 1)'
-                    ],
-                    borderWidth: 1,
-                    borderRadius: 8,
-                    borderSkipped: false
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        grid: {
-                            color: 'rgba(0,0,0,0.05)'
+        // Initialize bar chart for results page
+        let barChart;
+        function initBarChart() {
+            const barCtx = document.getElementById('barChart').getContext('2d');
+            barChart = new Chart(barCtx, {
+                type: 'bar',
+                data: {
+                    labels: resultsProjects.map(p => p.name),
+                    datasets: [{
+                        label: 'Votes',
+                        data: resultsProjects.map(p => p.votes),
+                        backgroundColor: [
+                            'rgba(79, 172, 254, 0.8)',
+                            'rgba(0, 242, 254, 0.8)',
+                            'rgba(46, 204, 113, 0.8)',
+                            'rgba(155, 89, 182, 0.8)'
+                        ],
+                        borderColor: [
+                            'rgba(79, 172, 254, 1)',
+                            'rgba(0, 242, 254, 1)',
+                            'rgba(46, 204, 113, 1)',
+                            'rgba(155, 89, 182, 1)'
+                        ],
+                        borderWidth: 2,
+                        borderRadius: 10,
+                        borderSkipped: false
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                },
+                                callback: function(value) {
+                                    return value;
+                                }
+                            }
                         },
-                        ticks: {
-                            precision: 0,
-                            font: {
-                                weight: 'bold'
+                        x: {
+                            grid: {
+                                display: false
+                            },
+                            ticks: {
+                                color: 'rgba(255, 255, 255, 0.7)',
+                                font: {
+                                    size: 14,
+                                    weight: 'bold'
+                                }
                             }
                         }
                     },
-                    x: {
-                        grid: {
+                    plugins: {
+                        legend: {
                             display: false
                         },
-                        ticks: {
-                            font: {
-                                size: 11,
-                                weight: 'bold'
+                        tooltip: {
+                            backgroundColor: 'rgba(0, 0, 0, 0.7)',
+                            titleFont: {
+                                size: 16
+                            },
+                            bodyFont: {
+                                size: 14
+                            },
+                            padding: 12,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `Votes: ${context.parsed.y}`;
+                                }
                             }
                         }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: false
                     },
-                    tooltip: {
-                        backgroundColor: 'rgba(26, 42, 108, 0.9)',
-                        titleFont: {
-                            size: 14
-                        },
-                        bodyFont: {
-                            size: 13
-                        },
-                        padding: 12,
-                        displayColors: false
+                    animation: {
+                        duration: 1000,
+                        easing: 'easeOutQuart'
                     }
                 }
-            }
-        });
+            });
+        }
         
         // Show notification
         function showNotification(message) {
-            notification.innerHTML = `
-                <i class="fas fa-check-circle"></i>
-                <div>
-                    <div>${message}</div>
-                    <div class="progress-bar"><div class="progress"></div></div>
-                </div>
-            `;
+            notification.innerHTML = `<i class="fas fa-check-circle"></i><div>${message}</div>`;
             notification.classList.add('show');
             setTimeout(() => {
                 notification.classList.remove('show');
             }, 3000);
         }
         
-        // Render project cards
+        // Render project cards for voting page
         function renderProjects() {
             projectsContainer.innerHTML = '';
             
@@ -494,13 +745,8 @@
                 const projectCard = document.createElement('div');
                 projectCard.className = 'project-card';
                 
-                const voteCount = `<div class="vote-count"><i class="fas fa-vote-yea"></i> ${project.votes} votes</div>`;
-                
                 projectCard.innerHTML = `
-                    <div class="project-title">
-                        <div>${project.name}</div>
-                        ${voteCount}
-                    </div>
+                    <h3 class="project-title">${project.name}</h3>
                     <p class="project-description">${project.description}</p>
                     <button class="vote-btn ${hasVoted ? 'vote-disabled' : ''}" 
                             data-id="${project.id}" 
@@ -516,6 +762,26 @@
             // Add vote event listeners
             document.querySelectorAll('.vote-btn:not(.vote-disabled)').forEach(btn => {
                 btn.addEventListener('click', handleVote);
+            });
+        }
+        
+        // Render project cards for results page
+        function renderResultsProjects() {
+            resultsProjectsContainer.innerHTML = '';
+            
+            // Sort projects by votes
+            const sortedProjects = [...resultsProjects].sort((a, b) => b.votes - a.votes);
+            
+            sortedProjects.forEach((project, index) => {
+                const projectCard = document.createElement('div');
+                projectCard.className = 'results-project-card';
+                projectCard.innerHTML = `
+                    <div class="project-rank">#${index + 1}</div>
+                    <h3 class="results-project-title">${project.name}</h3>
+                    <p class="results-project-description">${project.description}</p>
+                `;
+                
+                resultsProjectsContainer.appendChild(projectCard);
             });
         }
         
@@ -535,10 +801,6 @@
                     project.votes++;
                     hasVoted = true;
                     
-                    // Update chart
-                    resultsChart.data.datasets[0].data = projects.map(p => p.votes);
-                    resultsChart.update();
-                    
                     // Update UI
                     renderProjects();
                     showNotification(`Vote recorded for "${project.name}"`);
@@ -546,14 +808,124 @@
             }
         }
         
-        // Initialize the page
-        renderProjects();
+        // Calculate and update stats for results page
+        function updateStats() {
+            const totalVotes = resultsProjects.reduce((sum, project) => sum + project.votes, 0);
+            document.getElementById('totalVotes').textContent = totalVotes;
+            
+            const leadingProject = resultsProjects.reduce((prev, current) => 
+                (prev.votes > current.votes) ? prev : current
+            );
+            document.getElementById('leadingProject').textContent = leadingProject.name;
+        }
         
-        // Simulate loading user data from the app
+        // Simulate vote updates for results page
+        function updateResultsVotes() {
+            // Add random votes to simulate real-time updates
+            resultsProjects.forEach(project => {
+                // Random chance to get votes
+                if (Math.random() > 0.3) {
+                    const newVotes = Math.floor(Math.random() * 3) + 1;
+                    project.votes += newVotes;
+                }
+            });
+            
+            // Update chart
+            barChart.data.datasets[0].data = resultsProjects.map(p => p.votes);
+            barChart.update();
+            
+            // Update stats
+            updateStats();
+            
+            // Re-render projects with new data
+            renderResultsProjects();
+            
+            // Reset countdown
+            resetCountdown();
+        }
+        
+        // Countdown timer for results page
+        let countdown = 5;
+        function startCountdown() {
+            const countdownElement = document.getElementById('countdown');
+            countdownElement.textContent = countdown;
+            
+            const timer = setInterval(() => {
+                countdown--;
+                countdownElement.textContent = countdown;
+                
+                if (countdown <= 0) {
+                    clearInterval(timer);
+                    updateResultsVotes();
+                }
+            }, 1000);
+        }
+        
+        function resetCountdown() {
+            countdown = 5;
+            startCountdown();
+        }
+        
+        // Tab switching functionality
+        tabs.forEach(tab => {
+            tab.addEventListener('click', () => {
+                // Remove active class from all tabs
+                tabs.forEach(t => t.classList.remove('active'));
+                
+                // Add active class to clicked tab
+                tab.classList.add('active');
+                
+                // Hide all pages
+                votingPage.classList.remove('active');
+                resultsPage.classList.remove('active');
+                
+                // Show the selected page
+                if (tab.dataset.page === 'voting') {
+                    votingPage.classList.add('active');
+                } else {
+                    resultsPage.classList.add('active');
+                    // Initialize chart if not already initialized
+                    if (!barChart) {
+                        initBarChart();
+                    }
+                }
+            });
+        });
+        
+        // Initialize the page
         document.addEventListener('DOMContentLoaded', () => {
-            // In a real app, this would come from the parent app
+            // Set current date
+            const now = new Date();
+            const options = { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric', 
+                weekday: 'long' 
+            };
+            const dateString = now.toLocaleDateString('en-US', options);
+            document.getElementById('currentDate').textContent = dateString;
+            document.getElementById('resultsDate').textContent = dateString;
+            
+            // Set user info
             document.querySelector('.user-avatar').textContent = currentUser.avatar;
             document.querySelector('.user-info span').textContent = currentUser.name;
+            
+            // Initial render
+            renderProjects();
+            renderResultsProjects();
+            updateStats();
+            
+            // Start the countdown for results page
+            startCountdown();
+            
+            // Update time remaining every minute
+            setInterval(() => {
+                const hours = 18 - now.getHours();
+                const minutes = 60 - now.getMinutes();
+                const seconds = 60 - now.getSeconds();
+                document.getElementById('timeRemaining').textContent = 
+                    `${hours}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }, 1000);
         });
     </script>
 </body>
